@@ -7,7 +7,7 @@ let f= new Form(TopMost=true)
 f.Show()
 
     
-type Portal() as this=
+type Portal() =
     let mutable dead= false
     let mutable position=Point()
     let mutable time= new Timer()
@@ -33,12 +33,13 @@ type Portal() as this=
     member this.TimeSet=timeSet
     member this.TimeStart=timestart
     member this.TimeStop=timestop
+    member this.TimeGet
+        with get()=time.Interval
 
 
 type PortalController() as this=
     let mutable user=Point()
     let MaxDistQuad=50000
-    let mutable num=0
     let portals= new List<Portal>()
     let mutable preview=0
     let mutable numDead=0
@@ -69,22 +70,25 @@ type PortalController() as this=
         preview<-checkPreview pos
     let timer (t:int)=
         portals |> Seq.iter (fun b->
-           
+            
             b.TimeStop()
             b.TimeSet(t)            
             b.TimeStart()
+                
             )
     let endPreview (pos:Point)=
       if preview=1 && portals.Count<=4 then
-        portals.Add(new Portal(Position=Point(pos.X-10,pos.Y-10)))
-        num<-num+1
-        match num with
-            |1->timer(6000)
-            |2->timer(3000)
-            |3->timer(2000)
+        let tmpPort=new Portal(Position=Point(pos.X-10,pos.Y-10))
+        portals.Add(tmpPort)
+        match portals.Count with
+            |1->timer(60000)
+            |2->timer(30000)
+            |3->timer(20000)
             |4->timer(1000)
-            |5->timer(10)
+            |5->timer(60)
             |_->()
+        
+        
       else
         printfn "not posable"
         
@@ -94,21 +98,22 @@ type PortalController() as this=
 
     let paint (g:Graphics)=
         deads |> Seq.iter (fun i->
-            
-           let a= portals.Remove(i)    
-           num<-num-1  
+           let a= portals.Remove(i)
+           ()   
             )
         deads.Clear()
+
         if preview=1 then
             g.FillRectangle(Brushes.Green,positionPreview.X,positionPreview.Y,20,20)
         if preview=2 then
             g.FillRectangle(Brushes.Red,positionPreview.X,positionPreview.Y,20,20)
         
-       
         portals |> Seq.iteri (fun i b->
-            b.Paint(g)
+            
             if b.Dead then
                 deads.Add(b)
+            else
+                b.Paint(g)
             )
 
     member this.User
@@ -126,6 +131,7 @@ type ed() as this=
     let t= new Timer(Interval=100)
     do t.Tick.Add(fun e->(this.Invalidate()))
     do t.Start()
+
     override this.OnMouseDown e=
         PC.StartPreview e.Location
         this.Invalidate()
