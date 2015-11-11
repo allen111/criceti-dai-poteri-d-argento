@@ -1,0 +1,50 @@
+	
+
+    pochi loot ma importanti
+    vestiti magici/armor
+    modificatori>>>>upgrade
+    devi pensare bene prima di cambiare equip
+     
+    incantamenti? temporanei, generali, specifici? necessario implementarli di base o si possono inserire in seguito
+     
+    mondo continuo? tile?
+    input? wasd movimento piu mouse portali e interazione?
+     
+     
+    mdidl
+            inventorio
+    GCrowind
+            movement       
+                    collision
+    Allen
+            portal
+                    placement,
+                    timing,
+                    selection,
+                    effects,
+                    visual
+           
+    TODO
+            inventorio
+            movement       
+                    collision
+            portal
+                    placement,
+                    timing,
+                    selection,
+                    effects,
+                    visual
+            AI     
+                    Pathfinding for both npc and mob,
+                    npc
+                            dialog,
+                            commercio
+                    mob
+                            loot,
+                            combat
+            quest
+                    progression
+            map making
+                    map linking,
+                    map population
+
